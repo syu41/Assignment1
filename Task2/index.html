@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <meta charset="UTF-8">
+    <title>IOT Control Panel</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th><h2>IOT Control Panel</h2></th>
+    </tr>
+    <tr>
+        <td><h3>Control Panel</h3></td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>Switch Led On/Off</td>
+        <td>
+            <button type="button" id = "ledon">LED ON</button>
+            <button type="button" id = "ledoff">LED OFF</button>
+            <!--<label class="switch" id ="ledSwitch">
+                <input type="checkbox">
+                <div class="slider round"></div>
+            </label>-->
+        </td>
+    </tr>
+    <tr>
+        <td>Switch Motion Sensor On/Off</td>
+        <td>
+            <button type="button" id = "sensoron">Sensor ON</button>
+            <button type="button" id = "sensoroff">Sensor OFF</button>
+            <!--<label class="switch" id ="motionSwitch">
+                <input type="checkbox">
+                <div class="slider round"></div>
+            </label>-->
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Motion Detected
+        </td>
+        <td>
+            <p id="md"></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Long Motion
+        </td>
+        <td>
+            <p id="lm"></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Short Motion
+        </td>
+        <td>
+            <p id="sm"></p>
+        </td>
+    </tr>
+</table>
+<script>
+    //initialize three variables
+    var md = 0;
+    document.getElementById("md").innerHTML = md;
+    var lm = 0;
+    document.getElementById("lm").innerHTML = lm;
+    var sm = 0;
+    document.getElementById("sm").innerHTML = sm;
+</script>
+
+<script>
+    $(function() {
+            var client=io.connect('http://localhost:8080');
+            client.on("long motion", function() {
+                lm++;
+                document.getElementById("lm").innerHTML = lm;
+                md++;
+                document.getElementById("md").innerHTML = md;
+            });
+            client.on("short motion", function() {
+                sm++;
+                document.getElementById("sm").innerHTML = sm;
+                
+                md++;
+                document.getElementById("md").innerHTML = md;
+            });
+            $("#ledon").click(function(){
+                client.emit("turn LED on");
+            });
+            $("#ledoff").click(function(){
+                client.emit("turn LED off");
+            });
+            /*$("#ledSwitch").dblclick(function() {
+                if ($("#ledSwitch").hasClass("active")) {
+                    $("#ledSwitch").removeClass("active");
+                    client.emit("turn LED off");
+                }
+                else {
+                    $("#ledSwitch").addClass("active");   
+                    client.emit("turn LED on");
+                };
+            });*/
+            $("#sensoron").click(function(){
+                client.emit("turn motion sensor on");
+            });
+            $("#sensoroff").click(function(){
+                client.emit("turn motion sensor off");
+            });
+            /*$("#motionSwitch").dblclick(function() {
+                if ($("#motionSwitch").hasClass("active")) {
+                    $("#motionSwitch").removeClass("active");
+                    client.emit("turn motion sensor off");
+                }
+                else {
+                    $("#motionSwitch").addClass("active");   
+                    client.emit("turn motion sensor on");
+                };
+            });*/
+        });
+</script>
+
+</body>
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    .switch input {display:none;}
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+    .slider.round:before {
+        border-radius: 50%;
+    }
+</style>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 50%;
+    }
+    th, td {
+        text-align: center;
+        padding: 8px;
+    }
+    tr:nth-child(even){background-color: #f2f2f2}
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+</style>
+</html>
