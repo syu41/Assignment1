@@ -7,7 +7,7 @@ app.get('/', function(req, res) {
     console.log("Connected");
 })
 server.listen(8080, function() {
-    console.log('Listening at: http://localhost:8080');
+    console.log('Listening at: http://116.62.120.155');
 });
 
 
