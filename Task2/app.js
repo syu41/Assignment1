@@ -6,7 +6,7 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
     console.log("Connected");
 })
-server.listen(8080, function() {
+server.listen(3000, "116.62.120.155" {
     console.log('Listening at: http://116.62.120.155');
 });
 
